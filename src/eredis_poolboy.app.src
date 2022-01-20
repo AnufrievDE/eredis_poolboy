@@ -9,7 +9,10 @@
     eredis,
     poolboy
    ]},
-  {env,[]},
+  {env,[
+    {global_or_local, local},
+    {pools, []}
+  ]},
   {modules, []},
 
   {maintainers, []},
