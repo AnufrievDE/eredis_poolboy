@@ -54,8 +54,8 @@ add_pool(PoolName, PoolArgs, EredisArgs) ->
     GlobalOrLocal :: global | local,
     EredisArgs   :: options().
 add_pool(PoolName, PoolArgs, GlobalOrLocal, EredisArgs) ->
-    PoolArgs = pool_args(GlobalOrLocal, PoolName, EredisArgs),
-    PoolSpec = poolboy:child_spec(PoolName, PoolArgs, EredisArgs),
+    UPoolArgs = pool_args(GlobalOrLocal, PoolName, PoolArgs),
+    PoolSpec = poolboy:child_spec(PoolName, UPoolArgs, EredisArgs),
     supervisor:start_child(?MODULE, PoolSpec).
 
 %%%----------------------------------------------------------------------------
@@ -83,5 +83,7 @@ init(Env) ->
 %%%----------------------------------------------------------------------------
 %%% Internal functions
 %%%----------------------------------------------------------------------------
-pool_args(GlobalOrLocal, PoolName, EredisArgs) ->
-    [{name, {GlobalOrLocal, PoolName}}, {worker_module, eredis} | EredisArgs].
+pool_args(GlobalOrLocal, PoolName, ExtraArgs) ->
+    lists:usort([
+        {name, {GlobalOrLocal, PoolName}},
+        {worker_module, eredis} | ExtraArgs]).
