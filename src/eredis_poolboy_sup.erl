@@ -84,6 +84,6 @@ init(Env) ->
 %%% Internal functions
 %%%----------------------------------------------------------------------------
 pool_args(GlobalOrLocal, PoolName, ExtraArgs) ->
-    lists:usort([
+    lists:ukeysort(1, [
         {name, {GlobalOrLocal, PoolName}},
         {worker_module, eredis} | ExtraArgs]).
